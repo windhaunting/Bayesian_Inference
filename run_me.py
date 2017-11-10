@@ -4,7 +4,7 @@ import kaggle
 
 ################################################
     
-def testQuestionAProbDist(JLst, a):
+def getProbDistQuestionA(JLst, a):
     '''
     Implement a function to calculate P (J|α) with input arguments J, α and output P (J|α)
     JLst: a sequence of jar
@@ -17,30 +17,123 @@ def testQuestionAProbDist(JLst, a):
                    
     print ("PJGivenA: ", PJGivenA)
 
+    return PJGivenA
+
+def getProbDistQuestionB(JLst, BLst):
+    '''
+    Implement a function to calculate P (BjJ) with input arguments J, B and output P (BjJ).
+    ''' 
+    PBGivenJ = 1               # prob of Ball sequences given Jar sequences
+    for i in range(0, len(JLst)):
+        if JLst[i] == 0:
+            PBGivenJ = PBGivenJ * 0.2 if BLst[i]== 0 else PBGivenJ * 0.8
+        elif JLst[i] == 1:
+            PBGivenJ = PBGivenJ * 0.9 if BLst[i]== 0 else PBGivenJ * 0.1
+                
+    print ("PBGivenJ: ", PBGivenJ)
+
+    return PBGivenJ
+
+def getProbDistQuestionC(a):
+    '''
+    Implement a function to calculate P(α) with input argument α and output P(α
+    get prior probability p(a)
+    '''
+    PA  =0       #pa, probability of \alpha
+    if a >= 0 and a <= 1:
+        PA = 1
+        
+    print ("PA: ", PA)
+
+    return PA
+
 
     
+def getProbDistQuestionD(JLst, BLst, a):
+    '''
+    Implement a function to calculate P(α; J; B) with input arguments J, B, α and output
+    P(α; J; B).
+    '''
+    PJGivenA = getProbDistQuestionA(JLst, a)
+    PBGivenJ = getProbDistQuestionB(JLst, BLst)
+    PA = getProbDistQuestionC(a)
+    
+    PJointAJB = PJGivenA * PBGivenJ * PA           #joint probablity of P(α, J, B).
+    print ("PJointAJB: ", PJointAJB)
+
+
+
 if __name__== "__main__":
 
     ################################################
     print('1a through 1l computation goes here ...')
+    
+    '''
+    print ("beginning Question 1a")
+
     JLst = [0, 1, 1, 0, 1]
     a = 0.75
-    
-    testQuestionAProbDist(JLst, a)
+    getProbDistQuestionA(JLst, a)
     
     JLst = [0, 0, 1, 0, 1]
     a = 0.2
-    testQuestionAProbDist(JLst, a)
-    
+    getProbDistQuestionA(JLst, a)
     
     JLst = [1,1,0,1,0,1]
     a = 0.2
-    testQuestionAProbDist(JLst, a)
+    getProbDistQuestionA(JLst, a)
     
     JLst = [0,1,0,1,0,0]
     a = 0.2
-    testQuestionAProbDist(JLst, a)
+    getProbDistQuestionA(JLst, a)
     
+    print ("beginning Question 1b")
+    JLst = [0,1,1,0,1]
+    BLst = [1,0,0,1,1]
+    getProbDistQuestionB(JLst, BLst)
+    
+    JLst = [0,1,0,0,1]
+    BLst = [0,0,1,0,1]
+    getProbDistQuestionB(JLst, BLst)
+    
+    JLst = [0,1,1,0,0,1]
+    BLst = [1,0,1,1,1,0]
+    getProbDistQuestionB(JLst, BLst)
+    
+    JLst = [1,1,0,0,1,1]
+    BLst = [0,1,1,0,1,1]
+    getProbDistQuestionB(JLst, BLst)
+    
+    
+    print ("beginning Question 1c")
+    getProbDistQuestionC(2)
+    
+    '''
+    
+    print ("beginning Question 1d")
+    
+    JLst = [0,1,1,0,1]
+    BLst = [1,0,0,1,1]
+    a = 0.75
+    getProbDistQuestionD(JLst, BLst, a)
+    
+    JLst = [0,1,0,0,1]
+    BLst = [0,0,1,0,1]
+    a = 0.3
+    getProbDistQuestionD(JLst, BLst, a)
+    
+    JLst = [0,0,0,0,0,1]
+    BLst = [0,1,1,1,0,1]
+    a = 0.63
+    getProbDistQuestionD(JLst, BLst, a)
+    
+    JLst = [0,0,1,0,0,1,1]
+    BLst = [1,1,0,0,1,1,1]
+    a = 0.23
+    getProbDistQuestionD(JLst, BLst, a)
+    
+
+
 '''
 	print('1m')
 	lengths = [10, 15, 20, 25]
