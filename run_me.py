@@ -16,8 +16,6 @@ def getJAQuestionA(JArray, a):
     for i in range(1, len(JArray)):
         PJGivenA = PJGivenA * a if JArray[i] == JArray[i-1] else PJGivenA * (1-a)
                    
-    print ("PJGivenA: ", PJGivenA)
-
     return PJGivenA
 
 def getBJQuestionB(JArray, BArray):
@@ -30,9 +28,7 @@ def getBJQuestionB(JArray, BArray):
             PBGivenJ = PBGivenJ * 0.2 if BArray[i]== 0 else PBGivenJ * 0.8
         elif JArray[i] == 1:
             PBGivenJ = PBGivenJ * 0.9 if BArray[i]== 0 else PBGivenJ * 0.1
-                
-    print ("PBGivenJ: ", PBGivenJ)
-
+    
     return PBGivenJ
 
 def getPriorQuestionC(a):
@@ -43,9 +39,7 @@ def getPriorQuestionC(a):
     PA  =0       #pa, probability of \alpha
     if a >= 0 and a <= 1:
         PA = 1
-        
-    print ("PA: ", PA)
-
+    
     return PA
 
 
@@ -60,7 +54,8 @@ def getJointAJBQuestionD(JArray, BArray, a):
     PA = getPriorQuestionC(a)
     
     PJointAJB = PJGivenA * PBGivenJ * PA           #joint probablity of P(α, J, B).
-    print ("Joint P(α, J, B) PJointAJB: ", PJointAJB)
+
+    return PJointAJB
 
 
 def getNewJQuestionE(JArray):
@@ -71,30 +66,44 @@ def getNewJQuestionE(JArray):
     index = random.randint(0,len(JArray)-1)
     JArray[index] = 0 if JArray[index] == 1 else 1
 
-    print ("Flipped JArray: ", JArray)
-
     return JArray
 
 
 
-def MCMCJQuestionF(JArray, BArray, a, iters):
+def MCMCJQuestionF(BArray, a, iters):
     '''
     Use Metropolis Hastings algorithm to draw sample from P(J|a,B)
     '''
-    aMean = a
-    JMean = 0
+    #aMean = a
+    JMeanArray = np.array([0]*len(BArray))       ##initialize JMean
     
-    #propose new JArray
-    JArrayNew = getNewJQuestionE(JArray)
-    #acceptance ratio
-    acceptRatio = getJointAJBQuestionD(JArrayNew, BArray, a) / getJointAJBQuestionD(JArrayNew, BArray, a)
+    JArray = JMeanArray         #initialize J
     
-    if np.random.rand(0,1) <= acceptRatio:        #accept new JArray
-        JArray = JArrayNew
+    for i in range(0, iters):
+        #propose new JArray
+        JArrayNew = getNewJQuestionE(JMeanArray)
+        #acceptance ratio
+        acceptRatio = getJointAJBQuestionD(JArrayNew, BArray, a) / getJointAJBQuestionD(JArrayNew, BArray, a)
+        
+        if np.random.rand(0,1) <= acceptRatio:        #accept new JArray
+            JArray = JArrayNew
+        
+        #mean JArray
+        JMeanArray += JArray
     
-    #mean JArray
+        #print("JMeanArray: ", JArrayNew)
     
+    JMeanArray = np.divide(JMeanArray, iters)
+        
+    print("JMeanArray: ", JMeanArray)
+
+    PJointAJB = getJointAJBQuestionD(JMeanArray, BArray, a) 
     
+    PAB = getJAQuestionA(JMeanArray, a) * getBJQuestionB(JMeanArray, BArray) * getPriorQuestionC(a)
+    PJGivenAB = PJointAJB / PAB
+
+    print("PJGivenAB: ", PJGivenAB)
+
 if __name__== "__main__":
 
     ################################################
@@ -102,78 +111,92 @@ if __name__== "__main__":
     
     '''
     print ("beginning Question 1a")
-    JArray = np.asarray([0, 1, 1, 0, 1])
+    JArray = np.array([0, 1, 1, 0, 1])
     a = 0.75
-    getJAQuestionA(JArray, a)
-    
-    JArray = np.asarray([0, 0, 1, 0, 1])
+    PJGivenA = getJAQuestionA(JArray, a)
+    print ("PJGivenA: ", PJGivenA)
+
+    JArray = np.array([0, 0, 1, 0, 1])
     a = 0.2
-    getJAQuestionA(JArray, a)
-    
-    JArray = np.asarray([1,1,0,1,0,1])
+    PJGivenA = getJAQuestionA(JArray, a)
+    print ("PJGivenA: ", PJGivenA)
+
+    JArray = np.array([1,1,0,1,0,1])
     a = 0.2
-    getJAQuestionA(JArray, a)
-    
-    JArray = np.asarray([0,1,0,1,0,0])
+    PJGivenA = getJAQuestionA(JArray, a)
+    print ("PJGivenA: ", PJGivenA)
+
+    JArray = np.array([0,1,0,1,0,0])
     a = 0.2
-    getJAQuestionA(JArray, a)
-    
+    PJGivenA = getJAQuestionA(JArray, a)
+    print ("PJGivenA: ", PJGivenA)
     
     
     print ("beginning Question 1b")
-    JArray = np.asarray([0,1,1,0,1])
-    BArray = np.asarray([1,0,0,1,1])
-    getBJQuestionB(JArray, BArray)
-    
-    JArray = np.asarray([0,1,0,0,1])
-    BArray = np.asarray([0,0,1,0,1])
-    getBJQuestionB(JArray, BArray)
-    
-    JArray = np.asarray([0,1,1,0,0,1])
-    BArray = np.asarray([1,0,1,1,1,0])
-    getBJQuestionB(JArray, BArray)
-    
-    JArray = np.asarray([1,1,0,0,1,1])
-    BArray = np.asarray([0,1,1,0,1,1])
-    getBJQuestionB(JArray, BArray)
-    
+    JArray = np.array([0,1,1,0,1])
+    BArray = np.array([1,0,0,1,1])
+    PBGivenJ = getBJQuestionB(JArray, BArray)
+    print ("PBGivenJ: ", PBGivenJ)
+
+    JArray = np.array([0,1,0,0,1])
+    BArray = np.array([0,0,1,0,1])
+    PBGivenJ = getBJQuestionB(JArray, BArray)
+    print ("PBGivenJ: ", PBGivenJ)
+
+    JArray = np.array([0,1,1,0,0,1])
+    BArray = np.array([1,0,1,1,1,0])
+    PBGivenJ = getBJQuestionB(JArray, BArray)
+    print ("PBGivenJ: ", PBGivenJ)
+
+    JArray = np.array([1,1,0,0,1,1])
+    BArray = np.array([0,1,1,0,1,1])
+    PBGivenJ = getBJQuestionB(JArray, BArray)
+    print ("PBGivenJ: ", PBGivenJ)
     
     
     print ("beginning Question 1c")
-    getPriorQuestionC(2)
-    
+    PA = getPriorQuestionC(2)
+    print ("PA: ", PA)
     
     
     print ("beginning Question 1d")
     
-    JArray = np.asarray([0,1,1,0,1])
-    BArray = np.asarray([1,0,0,1,1])
+    JArray = np.array([0,1,1,0,1])
+    BArray = np.array([1,0,0,1,1])
     a = 0.75
-    getJointAJBQuestionD(JArray, BArray, a)
-    
-    JArray = np.asarray([0,1,0,0,1])
-    BArray = np.asarray([0,0,1,0,1])
+    PJointAJB = getJointAJBQuestionD(JArray, BArray, a)
+    print ("Joint P(α, J, B) PJointAJB: ", PJointAJB)
+
+    JArray = np.array([0,1,0,0,1])
+    BArray = np.array([0,0,1,0,1])
     a = 0.3
-    getJointAJBQuestionD(JArray, BArray, a)
+    PJointAJB = getJointAJBQuestionD(JArray, BArray, a)
+    print ("Joint P(α, J, B) PJointAJB: ", PJointAJB)
     
-    JArray = np.asarray([0,0,0,0,0,1])
+    JArray = np.array([0,0,0,0,0,1])
     BArray = [0,1,1,1,0,1]
     a = 0.63
-    getJointAJBQuestionD(JArray, BArray, a)
-    
-    JArray = np.asarray([0,0,1,0,0,1,1])
-    BArray = np.asarray([1,1,0,0,1,1,1])
+    PJointAJB = getJointAJBQuestionD(JArray, BArray, a)
+    print ("Joint P(α, J, B) PJointAJB: ", PJointAJB)
+
+    JArray = np.array([0,0,1,0,0,1,1])
+    BArray = np.array([1,1,0,0,1,1,1])
     a = 0.23
-    getJointAJBQuestionD(JArray, BArray, a)
+    PJointAJB = getJointAJBQuestionD(JArray, BArray, a)
+    print ("Joint P(α, J, B) PJointAJB: ", PJointAJB)
     
-    '''
     
     print ("beginning Question 1e")
-    JArray = np.asarray([1,1,0])
-    getNewJQuestionE(JArray)
+    JArray = np.array([1,1,0])
+    JArray = getNewJQuestionE(JArray)
+    print ("Flipped JArray: ", JArray)
 
-    
-
+    '''
+    print ("beginning Question 1f")
+    BArray = np.array([1,0,0,1,1])
+    a = 0.5
+    iters = 10000
+    MCMCJQuestionF(BArray, a, iters)
 
 '''
 	print('1m')
