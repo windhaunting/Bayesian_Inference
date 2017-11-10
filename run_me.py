@@ -59,7 +59,7 @@ def getProbDistQuestionD(JLst, BLst, a):
     PA = getProbDistQuestionC(a)
     
     PJointAJB = PJGivenA * PBGivenJ * PA           #joint probablity of P(α, J, B).
-    print ("PJointAJB: ", PJointAJB)
+    print ("Joint P(α, J, B) PJointAJB: ", PJointAJB)
 
 
 
