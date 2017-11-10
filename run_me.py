@@ -5,37 +5,37 @@ import random
 
 ################################################
     
-def getProbDistQuestionA(JLst, a):
+def getJAQuestionA(JArray, a):
     '''
     Implement a function to calculate P (J|α) with input arguments J, α and output P (J|α)
-    JLst: a sequence of jar
+    JArray: a sequence of jar
     a is the model paameter deciding the next jar same as the previous one or not
     '''
  
     PJGivenA = 1          #prob of jar sequence given  \alpha
-    for i in range(1, len(JLst)):
-        PJGivenA = PJGivenA * a if JLst[i] == JLst[i-1] else PJGivenA * (1-a)
+    for i in range(1, len(JArray)):
+        PJGivenA = PJGivenA * a if JArray[i] == JArray[i-1] else PJGivenA * (1-a)
                    
     print ("PJGivenA: ", PJGivenA)
 
     return PJGivenA
 
-def getProbDistQuestionB(JLst, BLst):
+def getBJQuestionB(JArray, BArray):
     '''
     Implement a function to calculate P (BjJ) with input arguments J, B and output P (BjJ).
     ''' 
     PBGivenJ = 1               # prob of Ball sequences given Jar sequences
-    for i in range(0, len(JLst)):
-        if JLst[i] == 0:
-            PBGivenJ = PBGivenJ * 0.2 if BLst[i]== 0 else PBGivenJ * 0.8
-        elif JLst[i] == 1:
-            PBGivenJ = PBGivenJ * 0.9 if BLst[i]== 0 else PBGivenJ * 0.1
+    for i in range(0, len(JArray)):
+        if JArray[i] == 0:
+            PBGivenJ = PBGivenJ * 0.2 if BArray[i]== 0 else PBGivenJ * 0.8
+        elif JArray[i] == 1:
+            PBGivenJ = PBGivenJ * 0.9 if BArray[i]== 0 else PBGivenJ * 0.1
                 
     print ("PBGivenJ: ", PBGivenJ)
 
     return PBGivenJ
 
-def getProbDistQuestionC(a):
+def getPriorQuestionC(a):
     '''
     Implement a function to calculate P(α) with input argument α and output P(α
     get prior probability p(a)
@@ -50,32 +50,51 @@ def getProbDistQuestionC(a):
 
 
     
-def getProbDistQuestionD(JLst, BLst, a):
+def getJointAJBQuestionD(JArray, BArray, a):
     '''
     Implement a function to calculate P(α; J; B) with input arguments J, B, α and output
     P(α; J; B).
     '''
-    PJGivenA = getProbDistQuestionA(JLst, a)
-    PBGivenJ = getProbDistQuestionB(JLst, BLst)
-    PA = getProbDistQuestionC(a)
+    PJGivenA = getJAQuestionA(JArray, a)
+    PBGivenJ = getBJQuestionB(JArray, BArray)
+    PA = getPriorQuestionC(a)
     
     PJointAJB = PJGivenA * PBGivenJ * PA           #joint probablity of P(α, J, B).
     print ("Joint P(α, J, B) PJointAJB: ", PJointAJB)
 
 
-def getNewJQuestionE(JLst):
+def getNewJQuestionE(JArray):
     '''
     a function to generate a new proposed value for J with input argument J and output
     Jnew. This is calculated by randomly selecting a Ji and flipping its value.
     '''
-    index = random.randint(0,len(JLst)-1)
-    JLst[index] = 0 if JLst[index] == 1 else 1
+    index = random.randint(0,len(JArray)-1)
+    JArray[index] = 0 if JArray[index] == 1 else 1
 
-    print ("Flipped JLst: ", JLst)
+    print ("Flipped JArray: ", JArray)
 
-    return JLst
+    return JArray
 
 
+
+def MCMCJQuestionF(JArray, BArray, a, iters):
+    '''
+    Use Metropolis Hastings algorithm to draw sample from P(J|a,B)
+    '''
+    aMean = a
+    JMean = 0
+    
+    #propose new JArray
+    JArrayNew = getNewJQuestionE(JArray)
+    #acceptance ratio
+    acceptRatio = getJointAJBQuestionD(JArrayNew, BArray, a) / getJointAJBQuestionD(JArrayNew, BArray, a)
+    
+    if np.random.rand(0,1) <= acceptRatio:        #accept new JArray
+        JArray = JArrayNew
+    
+    #mean JArray
+    
+    
 if __name__== "__main__":
 
     ################################################
@@ -83,70 +102,76 @@ if __name__== "__main__":
     
     '''
     print ("beginning Question 1a")
-
-    JLst = [0, 1, 1, 0, 1]
+    JArray = np.asarray([0, 1, 1, 0, 1])
     a = 0.75
-    getProbDistQuestionA(JLst, a)
+    getJAQuestionA(JArray, a)
     
-    JLst = [0, 0, 1, 0, 1]
+    JArray = np.asarray([0, 0, 1, 0, 1])
     a = 0.2
-    getProbDistQuestionA(JLst, a)
+    getJAQuestionA(JArray, a)
     
-    JLst = [1,1,0,1,0,1]
+    JArray = np.asarray([1,1,0,1,0,1])
     a = 0.2
-    getProbDistQuestionA(JLst, a)
+    getJAQuestionA(JArray, a)
     
-    JLst = [0,1,0,1,0,0]
+    JArray = np.asarray([0,1,0,1,0,0])
     a = 0.2
-    getProbDistQuestionA(JLst, a)
+    getJAQuestionA(JArray, a)
+    
+    
     
     print ("beginning Question 1b")
-    JLst = [0,1,1,0,1]
-    BLst = [1,0,0,1,1]
-    getProbDistQuestionB(JLst, BLst)
+    JArray = np.asarray([0,1,1,0,1])
+    BArray = np.asarray([1,0,0,1,1])
+    getBJQuestionB(JArray, BArray)
     
-    JLst = [0,1,0,0,1]
-    BLst = [0,0,1,0,1]
-    getProbDistQuestionB(JLst, BLst)
+    JArray = np.asarray([0,1,0,0,1])
+    BArray = np.asarray([0,0,1,0,1])
+    getBJQuestionB(JArray, BArray)
     
-    JLst = [0,1,1,0,0,1]
-    BLst = [1,0,1,1,1,0]
-    getProbDistQuestionB(JLst, BLst)
+    JArray = np.asarray([0,1,1,0,0,1])
+    BArray = np.asarray([1,0,1,1,1,0])
+    getBJQuestionB(JArray, BArray)
     
-    JLst = [1,1,0,0,1,1]
-    BLst = [0,1,1,0,1,1]
-    getProbDistQuestionB(JLst, BLst)
+    JArray = np.asarray([1,1,0,0,1,1])
+    BArray = np.asarray([0,1,1,0,1,1])
+    getBJQuestionB(JArray, BArray)
+    
     
     
     print ("beginning Question 1c")
-    getProbDistQuestionC(2)
+    getPriorQuestionC(2)
     
-    '''
+    
     
     print ("beginning Question 1d")
     
-    JLst = [0,1,1,0,1]
-    BLst = [1,0,0,1,1]
+    JArray = np.asarray([0,1,1,0,1])
+    BArray = np.asarray([1,0,0,1,1])
     a = 0.75
-    getProbDistQuestionD(JLst, BLst, a)
+    getJointAJBQuestionD(JArray, BArray, a)
     
-    JLst = [0,1,0,0,1]
-    BLst = [0,0,1,0,1]
+    JArray = np.asarray([0,1,0,0,1])
+    BArray = np.asarray([0,0,1,0,1])
     a = 0.3
-    getProbDistQuestionD(JLst, BLst, a)
+    getJointAJBQuestionD(JArray, BArray, a)
     
-    JLst = [0,0,0,0,0,1]
-    BLst = [0,1,1,1,0,1]
+    JArray = np.asarray([0,0,0,0,0,1])
+    BArray = [0,1,1,1,0,1]
     a = 0.63
-    getProbDistQuestionD(JLst, BLst, a)
+    getJointAJBQuestionD(JArray, BArray, a)
     
-    JLst = [0,0,1,0,0,1,1]
-    BLst = [1,1,0,0,1,1,1]
+    JArray = np.asarray([0,0,1,0,0,1,1])
+    BArray = np.asarray([1,1,0,0,1,1,1])
     a = 0.23
-    getProbDistQuestionD(JLst, BLst, a)
+    getJointAJBQuestionD(JArray, BArray, a)
+    
+    '''
     
     print ("beginning Question 1e")
-    getNewJQuestionE(JLst)
+    JArray = np.asarray([1,1,0])
+    getNewJQuestionE(JArray)
+
     
 
 
