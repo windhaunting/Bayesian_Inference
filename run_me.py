@@ -1,6 +1,7 @@
 # Import python modules
 import numpy as np
 import kaggle
+import random
 
 ################################################
     
@@ -61,6 +62,18 @@ def getProbDistQuestionD(JLst, BLst, a):
     PJointAJB = PJGivenA * PBGivenJ * PA           #joint probablity of P(α, J, B).
     print ("Joint P(α, J, B) PJointAJB: ", PJointAJB)
 
+
+def getNewJQuestionE(JLst):
+    '''
+    a function to generate a new proposed value for J with input argument J and output
+    Jnew. This is calculated by randomly selecting a Ji and flipping its value.
+    '''
+    index = random.randint(0,len(JLst)-1)
+    JLst[index] = 0 if JLst[index] == 1 else 1
+
+    print ("Flipped JLst: ", JLst)
+
+    return JLst
 
 
 if __name__== "__main__":
@@ -131,6 +144,9 @@ if __name__== "__main__":
     BLst = [1,1,0,0,1,1,1]
     a = 0.23
     getProbDistQuestionD(JLst, BLst, a)
+    
+    print ("beginning Question 1e")
+    getNewJQuestionE(JLst)
     
 
 
