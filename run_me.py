@@ -69,6 +69,9 @@ def getNewJQuestionE(JArray):
     return JArray
 
 
+def getNewAQuestionG():
+    X = 1
+    
 
 def MCMCJQuestionF(BArray, a, iters):
     '''
@@ -78,6 +81,39 @@ def MCMCJQuestionF(BArray, a, iters):
     JMeanArray = np.array([0]*len(BArray))       ##initialize JMean
     
     JArray = JMeanArray         #initialize J
+    
+    for i in range(0, iters):
+        #propose new JArray
+        
+        #acceptance ratio
+        acceptRatio = getJointAJBQuestionD(JArrayNew, BArray, a) / getJointAJBQuestionD(JArrayNew, BArray, a)
+        
+        if np.random.rand(0,1) <= acceptRatio:        #accept new JArray
+            JArray = JArrayNew
+        
+        #mean JArray
+        JMeanArray += JArray
+    
+        #print("JMeanArray: ", JArrayNew)
+    
+    JMeanArray = np.divide(JMeanArray, iters)
+        
+    print("JMeanArray: ", JMeanArray, np.mean(JMeanArray))
+
+    PJointAJB = getJointAJBQuestionD(JMeanArray, BArray, a) 
+    
+    PAB = getJAQuestionA(JMeanArray, a) * getBJQuestionB(JMeanArray, BArray) * getPriorQuestionC(a)
+    PJGivenAB = PJointAJB / PAB
+
+    print("PJGivenAB: ", PJGivenAB)
+
+
+def MCMCJQuestionH(JArray, BArray, iters):
+    '''
+    Use Metropolis Hastings algorithm to draw sample from P(J|a,B)
+    '''
+    aMean = 0       #initialize JMean
+    
     
     for i in range(0, iters):
         #propose new JArray
@@ -95,7 +131,7 @@ def MCMCJQuestionF(BArray, a, iters):
     
     JMeanArray = np.divide(JMeanArray, iters)
         
-    print("JMeanArray: ", JMeanArray)
+    print("JMeanArray: ", JMeanArray, np.mean(JMeanArray))
 
     PJointAJB = getJointAJBQuestionD(JMeanArray, BArray, a) 
     
@@ -103,7 +139,8 @@ def MCMCJQuestionF(BArray, a, iters):
     PJGivenAB = PJointAJB / PAB
 
     print("PJGivenAB: ", PJGivenAB)
-
+    
+    
 if __name__== "__main__":
 
     ################################################
