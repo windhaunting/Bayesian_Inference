@@ -69,8 +69,9 @@ def getNewJQuestionE(JArray):
     return JArray
 
 
-def getNewAQuestionG():
-    X = 1
+def getNewAQuestionG(a):
+    
+    aNew = np.random.random_sample()
     
 
 def MCMCJQuestionF(BArray, a, iters):
