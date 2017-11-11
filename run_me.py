@@ -69,10 +69,6 @@ def getNewJQuestionE(JArray):
     return JArray
 
 
-def getNewAQuestionG(a):
-    
-    aNew = np.random.random_sample()
-    
 
 def MCMCJQuestionF(BArray, a, iters):
     '''
@@ -109,37 +105,44 @@ def MCMCJQuestionF(BArray, a, iters):
     print("PJGivenAB: ", PJGivenAB)
 
 
+
+def getNewAQuestionG(a):
+    
+    aNew = np.random.random_sample()
+    return aNew
+
+
 def MCMCJQuestionH(JArray, BArray, iters):
     '''
     Use Metropolis Hastings algorithm to draw sample from P(J|a,B)
     '''
     aMean = 0       #initialize JMean
     
-    
+    a = aMean
     for i in range(0, iters):
         #propose new JArray
-        JArrayNew = getNewJQuestionE(JMeanArray)
+        aNew = getNewAQuestionG(a)
         #acceptance ratio
-        acceptRatio = getJointAJBQuestionD(JArrayNew, BArray, a) / getJointAJBQuestionD(JArrayNew, BArray, a)
+        acceptRatio = getJointAJBQuestionD(JArray, BArray, aNew) / getJointAJBQuestionD(JArray, BArray, a)
         
         if np.random.rand(0,1) <= acceptRatio:        #accept new JArray
-            JArray = JArrayNew
+            a = aNew
         
         #mean JArray
-        JMeanArray += JArray
+        aMean += a
     
         #print("JMeanArray: ", JArrayNew)
     
-    JMeanArray = np.divide(JMeanArray, iters)
+    aMean = aMean / iters
         
-    print("JMeanArray: ", JMeanArray, np.mean(JMeanArray))
+    print("JMeanArray: ", aMean)
 
-    PJointAJB = getJointAJBQuestionD(JMeanArray, BArray, a) 
+    PJointAJB = getJointAJBQuestionD(JArray, BArray, aMean) 
     
-    PAB = getJAQuestionA(JMeanArray, a) * getBJQuestionB(JMeanArray, BArray) * getPriorQuestionC(a)
-    PJGivenAB = PJointAJB / PAB
+    PJB = getJAQuestionA(JArray, aMean) * getBJQuestionB(JArray, BArray) * getPriorQuestionC(aMean)
+    PAGivenJB = PJointAJB / PJB
 
-    print("PJGivenAB: ", PJGivenAB)
+    print("PAGivenJB: ", PAGivenJB)
     
     
 if __name__== "__main__":
@@ -235,6 +238,16 @@ if __name__== "__main__":
     a = 0.5
     iters = 10000
     MCMCJQuestionF(BArray, a, iters)
+
+    print ("beginning Question 1g")
+    aNew = getNewAQuestionG(a)
+    print ("proposed aNew: ", aNew)
+
+    print ("beginning Question 1h")
+    JArray= np.array([0,1,0,1,0])
+    BArray = np.array([1,0,1,0,1])
+    MCMCJQuestionH(JArray, BArray, iters)
+
 
 '''
 	print('1m')
