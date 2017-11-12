@@ -107,12 +107,16 @@ def MCMCJQuestionF(BArray, a, iters):
 
 
 def getNewAQuestionG(a):
+    '''
+    a new proposed value for α with input argument α and output
+    αnew. This is calculated by selecting a new α value uniformly at random
+    '''
     
     aNew = np.random.random_sample()
     return aNew
 
 
-def MCMCJQuestionH(JArray, BArray, iters):
+def MCMCAQuestionH(JArray, BArray, iters):
     '''
     Use Metropolis Hastings algorithm to draw sample from P(J|a,B)
     '''
@@ -128,11 +132,9 @@ def MCMCJQuestionH(JArray, BArray, iters):
         if np.random.rand(0,1) <= acceptRatio:        #accept new JArray
             a = aNew
         
-        #mean JArray
+        #mean alpha
         aMean += a
-    
-        #print("JMeanArray: ", JArrayNew)
-    
+        
     aMean = aMean / iters
         
     print("aMean: ", aMean)
@@ -144,6 +146,62 @@ def MCMCJQuestionH(JArray, BArray, iters):
 
     print("PAGivenJB: ", PAGivenJB)
     
+
+
+def getNewAJQuestionI(a, JArray):
+    '''
+    function to generate a proposed values for α and J with input argument α, J and output αnew, Jnew. 
+    This is performed by invoking the proposal functions for α (1g) and J (1e) independently
+    '''
+    aNew = getNewAQuestionG(a)
+    JArrayNew = getNewJQuestionE(JArray)
+    
+    
+ 
+    
+def MCMCAJQuestionJ(a, JArray, BArray, iters):
+    '''
+    Use Metropolis Hastings algorithm to draw sample from P(Ja|B)
+    
+    '''
+    aMean = 0      #initialize JMean
+    JMeanArray = np.array([0]*len(JArray))       ##initialize JMean
+    
+    for i in range(0, iters):
+        #propose new alpha and J
+        aNew = getNewAQuestionG(a)
+        JArrayNew = getNewJQuestionE(JArray)
+        
+        #acceptance ratio
+        acceptRatio = getJointAJBQuestionD(JArrayNew, BArray, aNew) / getJointAJBQuestionD(JArray, BArray, a)
+        
+        if np.random.rand(0,1) <= acceptRatio:        #accept new JArray
+            a = aNew
+            JArray = JArrayNew
+            
+        
+        #mean alpha and JArray
+        aMean += a
+        JMeanArray += JArray
+        
+        #print("JMeanArray: ", JArrayNew)
+    
+    aMean = aMean / iters
+    JMeanArray = np.divide(JMeanArray, iters)
+    
+    print("aMean: ", aMean)
+    print("JMeanArray: ", JMeanArray, np.mean(JMeanArray))
+    
+    
+    PJointAJB = getJointAJBQuestionD(JArray, BArray, aMean) 
+    
+    PJB = getJAQuestionA(JArray, aMean) * getBJQuestionB(JArray, BArray) * getPriorQuestionC(aMean)
+    PAGivenJB = PJointAJB / PJB
+
+    print("PAGivenJB: ", PAGivenJB)
+    
+
+
     
 if __name__== "__main__":
 
@@ -255,7 +313,7 @@ if __name__== "__main__":
     BArray = np.array([1,0,1,0,1])
     
     iters = 100   #10000
-    MCMCJQuestionH(JArray, BArray, iters)
+    MCMCAQuestionH(JArray, BArray, iters)
     
     
 '''
