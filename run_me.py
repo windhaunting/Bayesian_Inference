@@ -202,6 +202,22 @@ def MCMCAJQuestionJ(a, JArray, BArray, iters):
     
 
 
+def getNextBallQuestionK(Jn, a):
+    '''
+    return the probability of a black ball in N + 1th jar given the Nth jar
+    and α only.
+
+    '''
+    
+    pBnext = 0
+    if Jn == 0:            #
+        pBnext = a*0.8 + (1-a)*0.1
+    elif Jn == 1:
+        pBnext = a*0.1 + (1-a)*0.8
+       
+    return pBnext
+    
+    
     
 if __name__== "__main__":
 
@@ -309,12 +325,34 @@ if __name__== "__main__":
     MCMCJQuestionH(JArray, BArray, iters)
     '''
     
+    '''
     JArray = np.array([0,1,0,1,0])
     BArray = np.array([1,0,1,0,1])
     
     iters = 100   #10000
     MCMCAQuestionH(JArray, BArray, iters)
+    '''
     
+    a = 0.6
+    Jn = 1
+    pBnext = getNextBallQuestionK(Jn, a)
+    print ("Question k pBnext : ", pBnext)
+    
+    a = 0.99
+    Jn = 0
+    pBnext = getNextBallQuestionK(Jn, a)
+    print ("Question k pBnext : ", pBnext)
+    
+    a = 0.33456
+    Jn = 0
+    pBnext = getNextBallQuestionK(Jn, a)
+    print ("Question k pBnext : ", pBnext)    
+    
+    a = 0.5019
+    Jn = 0
+    pBnext = getNextBallQuestionK(Jn, a)
+    print ("Question k pBnext : ", pBnext) 
+     
     
 '''
 	print('1m')
