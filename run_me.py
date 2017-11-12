@@ -81,7 +81,7 @@ def MCMCJQuestionF(BArray, a, iters):
     
     for i in range(0, iters):
         #propose new JArray
-        
+        JArrayNew = getNewJQuestionE(JArray)
         #acceptance ratio
         acceptRatio = getJointAJBQuestionD(JArrayNew, BArray, a) / getJointAJBQuestionD(JArrayNew, BArray, a)
         
@@ -120,7 +120,7 @@ def MCMCJQuestionH(JArray, BArray, iters):
     
     a = aMean
     for i in range(0, iters):
-        #propose new JArray
+        #propose new alpha
         aNew = getNewAQuestionG(a)
         #acceptance ratio
         acceptRatio = getJointAJBQuestionD(JArray, BArray, aNew) / getJointAJBQuestionD(JArray, BArray, a)
@@ -135,7 +135,7 @@ def MCMCJQuestionH(JArray, BArray, iters):
     
     aMean = aMean / iters
         
-    print("JMeanArray: ", aMean)
+    print("aMean: ", aMean)
 
     PJointAJB = getJointAJBQuestionD(JArray, BArray, aMean) 
     
@@ -233,6 +233,8 @@ if __name__== "__main__":
     print ("Flipped JArray: ", JArray)
 
     '''
+    
+    '''
     print ("beginning Question 1f")
     BArray = np.array([1,0,0,1,1])
     a = 0.5
@@ -247,8 +249,15 @@ if __name__== "__main__":
     JArray= np.array([0,1,0,1,0])
     BArray = np.array([1,0,1,0,1])
     MCMCJQuestionH(JArray, BArray, iters)
-
-
+    '''
+    
+    JArray = np.array([0,1,0,1,0])
+    BArray = np.array([1,0,1,0,1])
+    
+    iters = 100   #10000
+    MCMCJQuestionH(JArray, BArray, iters)
+    
+    
 '''
 	print('1m')
 	lengths = [10, 15, 20, 25]
