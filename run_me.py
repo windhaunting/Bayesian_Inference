@@ -156,7 +156,7 @@ def getNewAJQuestionI(a, JArray):
     aNew = getNewAQuestionG(a)
     JArrayNew = getNewJQuestionE(JArray)
     
-    
+    return aNew, JArrayNew
  
     
 def MCMCAJQuestionJ(a, JArray, BArray, iters):
@@ -169,9 +169,7 @@ def MCMCAJQuestionJ(a, JArray, BArray, iters):
     
     for i in range(0, iters):
         #propose new alpha and J
-        aNew = getNewAQuestionG(a)
-        JArrayNew = getNewJQuestionE(JArray)
-        
+        aNew, JArrayNew = getNewAJQuestionI(a, JArray)
         #acceptance ratio
         acceptRatio = getJointAJBQuestionD(JArrayNew, BArray, aNew) / getJointAJBQuestionD(JArray, BArray, a)
         
@@ -209,10 +207,10 @@ def getNextBallQuestionK(Jn, a):
 
     '''
     
-    pBnext = 0
-    if Jn == 0:            #
+    pBnext = 0               #the n+1th ball given Jn and alpha
+    if Jn == 0:            #Jar 0 
         pBnext = a*0.8 + (1-a)*0.1
-    elif Jn == 1:
+    elif Jn == 1:          
         pBnext = a*0.1 + (1-a)*0.8
        
     return pBnext
@@ -308,13 +306,14 @@ if __name__== "__main__":
 
     '''
     
-    '''
+    
     print ("beginning Question 1f")
     BArray = np.array([1,0,0,1,1])
     a = 0.5
     iters = 10000
     MCMCJQuestionF(BArray, a, iters)
 
+    '''
     print ("beginning Question 1g")
     aNew = getNewAQuestionG(a)
     print ("proposed aNew: ", aNew)
@@ -333,6 +332,7 @@ if __name__== "__main__":
     MCMCAQuestionH(JArray, BArray, iters)
     '''
     
+    '''
     a = 0.6
     Jn = 1
     pBnext = getNextBallQuestionK(Jn, a)
@@ -353,6 +353,9 @@ if __name__== "__main__":
     pBnext = getNextBallQuestionK(Jn, a)
     print ("Question k pBnext : ", pBnext) 
      
+    
+    '''
+    
     
 '''
 	print('1m')
