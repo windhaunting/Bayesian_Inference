@@ -82,7 +82,6 @@ def MCMCJQuestionF(BArray, a, iters):
     JMeanArray = np.array([0]*len(BArray))       ##initialize JMean
     
     JArray = JMeanArray         #initialize J
-    print ("initia: ",JArray)
 
     for i in range(0, iters):
         #propose new JArray
@@ -95,13 +94,12 @@ def MCMCJQuestionF(BArray, a, iters):
         #mean JArray
         JMeanArray += JArray
         
-        J2MeanStoresArray[i] = JMeanArray[1]/ (i+1)
         #print("J2MeanStoresArray: ", JMeanArray[1],i, J2MeanStoresArray[i], JMeanArray[1]/ (i+1))
     JMeanArray = np.divide(JMeanArray, iters)
         
-    print("JMeanArray: ", JMeanArray)
+    #print("JMeanArray: ", JMeanArray)
 
-    return JMeanArray, J2MeanStoresArray
+    return JMeanArray
 
 
 def getNewAQuestionG(a):
@@ -121,29 +119,20 @@ def MCMCAQuestionH(JArray, BArray, iters):
     aMean = 0       #initialize JMean
     
     a = aMean
+    aMeanStore = np.array([0]*iters)
     for i in range(0, iters):
         #propose new alpha
         aNew = getNewAQuestionG(a)
         #acceptance ratio
-        acceptRatio = getJointAJBQuestionD(JArray, BArray, aNew) / getJointAJBQuestionD(JArray, BArray, a)
+        acceptRatio = getJointAJBQuestionD(JArray, BArray, aNew) / (getJointAJBQuestionD(JArray, BArray, a) + 1e-200)
         
-        if np.random.rand(0,1) <= acceptRatio:        #accept new JArray
+        if np.random.rand() <= acceptRatio:        #accept new JArray
             a = aNew
-        
         #mean alpha
         aMean += a
         
     aMean = aMean / iters
-        
-    print("aMean: ", aMean)
-
-    #PJointAJB = getJointAJBQuestionD(JArray, BArray, aMean) 
-    
-    # PJB = getJAQuestionA(JArray, aMean) * getBJQuestionB(JArray, BArray) * getPriorQuestionC(aMean)
-    #PAGivenJB = PJointAJB / PJB
-
-   # print("PAGivenJB: ", PAGivenJB)
-    
+    return aMean
 
 
 def getNewAJQuestionI(a, JArray):
@@ -165,7 +154,6 @@ def MCMCAJQuestionJ(a, JArray, BArray, iters):
     aMean = 0      #initialize JMean
     JMeanArray = np.array([0]*len(JArray))       ##initialize JMean
     
-    J2MeanStoresArray = np.array([0]*iters, dtype =np.float)
     for i in range(0, iters):
         #propose new alpha and J
         aNew, JArrayNew = getNewAJQuestionI(a, JArray)
@@ -303,34 +291,52 @@ if __name__== "__main__":
     JArrayNew = getNewJQuestionE(JArray)
     print ("Flipped JArrayNew: ", JArrayNew)
 
-    '''
     
     
     print ("beginning Question 1f")
     BArray = np.array([1,0,0,1,1])
     a = 0.5
     iters = 10000
-    JMeanArray, J2MeanStoresArray = MCMCJQuestionF(BArray, a, iters)
-    print (" J2MeanStoresArray: ", J2MeanStoresArray)
-    plotQuestionFBarPJ2(iters, J2MeanStoresArray)
-    '''
+    JMeanArray = MCMCJQuestionF(BArray, a, iters)
+    print (" JMeanArray: ", JMeanArray)
+    
+    #plotQuestionFBarPJ2([JMeanArray[2], 1-JMeanArray[2]])
+    
+    
+    BArray = np.array([1,0,0,0,1,0,1,1])
+    a = 0.11
+    iters = 10000
+    JMeanArray = MCMCJQuestionF(BArray, a, iters)
+    print (" JMeanArray: ", JMeanArray)
+    
+    BArray = np.array([1,0,0,1,1,0,0])
+    a = 0.75
+    iters = 10000
+    JMeanArray = MCMCJQuestionF(BArray, a, iters)
+    print (" JMeanArray: ", JMeanArray)
+       
+    
+    
     print ("beginning Question 1g")
+    a = 0.5
     aNew = getNewAQuestionG(a)
     print ("proposed aNew: ", aNew)
-
+    
+    
+    '''
     print ("beginning Question 1h")
     JArray= np.array([0,1,0,1,0])
     BArray = np.array([1,0,1,0,1])
-    MCMCJQuestionH(JArray, BArray, iters)
-    '''
+    iters = 10000
+    aMean = MCMCAQuestionH(JArray, BArray, iters)
+    print("aMean: ", aMean)
+
     
-    '''
-    JArray = np.array([0,1,0,1,0])
-    BArray = np.array([1,0,1,0,1])
-    
-    iters = 100   #10000
-    MCMCAQuestionH(JArray, BArray, iters)
-    '''
+    JArray = np.array([0,0,0,0,0])
+    BArray = np.array([1,1,1,1,1])
+    iters = 10000   #10000
+    aMean = MCMCAQuestionH(JArray, BArray, iters)
+    print("aMean: ", aMean)
     
     '''
     a = 0.6
@@ -353,7 +359,6 @@ if __name__== "__main__":
     pBnext = getNextBallQuestionK(Jn, a)
     print ("Question k pBnext : ", pBnext) 
      
-    
     '''
     
     
