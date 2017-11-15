@@ -1,7 +1,11 @@
 # Import python modules
+from __future__ import division
+
 import numpy as np
 import kaggle
 import random
+
+from plotting import plotQuestionFBarPJ2
 
 ################################################
     
@@ -80,36 +84,26 @@ def MCMCJQuestionF(BArray, a, iters):
     
     JArray = JMeanArray         #initialize J
     print ("initia: ",JArray)
+    J2MeanStoresArray = np.array([0]*iters)
 
-    for i in range(0, iters):
+    for i in range(0, 20):
         #propose new JArray
-        #print ("JArray: ",JArray)
-
         JArrayNew = getNewJQuestionE(JArray)
-        #print ("JArrayNew: ", JArray, JArrayNew)
         #acceptance ratio
         acceptRatio =  getJointAJBQuestionD(JArrayNew, BArray, a) / getJointAJBQuestionD(JArray, BArray, a)
-        print ("acceptRatio: ",acceptRatio)
-        if np.random.rand(0,1) <= acceptRatio:        #accept new JArray
-            JArray = JArrayNew.copy()
-            print ("enter here: ",acceptRatio)
+        if np.random.rand() <= acceptRatio:        #accept new JArray
+            JArray = JArrayNew
 
         #mean JArray
         JMeanArray += JArray
-    
-        #print("JMeanArray: ", JArrayNew)
-    
+        
+        J2MeanStoresArray[i] = JMeanArray[1]/ float(i+1)
+        print("J2MeanStoresArray: ", JMeanArray[1],i, J2MeanStoresArray[i])
     JMeanArray = np.divide(JMeanArray, iters)
         
     print("JMeanArray: ", JMeanArray)
 
-   #PJointAJB = getJointAJBQuestionD(JMeanArray, BArray, a) 
-    
-   # PAB = getJAQuestionA(JMeanArray, a) * getBJQuestionB(JMeanArray, BArray) * getPriorQuestionC(a)
-   # PJGivenAB = PJointAJB / PAB
-
-    #print("PJGivenAB: ", PJGivenAB)
-
+    return JMeanArray, J2MeanStoresArray
 
 
 def getNewAQuestionG(a):
@@ -173,6 +167,7 @@ def MCMCAJQuestionJ(a, JArray, BArray, iters):
     aMean = 0      #initialize JMean
     JMeanArray = np.array([0]*len(JArray))       ##initialize JMean
     
+    J2MeanStoresArray = np.array([0]*len(iters))
     for i in range(0, iters):
         #propose new alpha and J
         aNew, JArrayNew = getNewAJQuestionI(a, JArray)
@@ -188,6 +183,7 @@ def MCMCAJQuestionJ(a, JArray, BArray, iters):
         aMean += a
         JMeanArray += JArray
         
+        J2MeanStoresArray[i] = (JMeanArray[2]/(i+1))
         #print("JMeanArray: ", JArrayNew)
     
     aMean = aMean / iters
@@ -307,8 +303,8 @@ if __name__== "__main__":
     
     print ("beginning Question 1e")
     JArray = np.array([1,1,0])
-    JArray = getNewJQuestionE(JArray)
-    print ("Flipped JArray: ", JArray)
+    JArrayNew = getNewJQuestionE(JArray)
+    print ("Flipped JArrayNew: ", JArrayNew)
 
     '''
     
@@ -317,8 +313,9 @@ if __name__== "__main__":
     BArray = np.array([1,0,0,1,1])
     a = 0.5
     iters = 10000
-    MCMCJQuestionF(BArray, a, iters)
-
+    JMeanArray, J2MeanStoresArray = MCMCJQuestionF(BArray, a, iters)
+    print (" J2MeanStoresArray: ", J2MeanStoresArray)
+    plotQuestionFBarPJ2(iters, J2MeanStoresArray)
     '''
     print ("beginning Question 1g")
     aNew = getNewAQuestionG(a)
