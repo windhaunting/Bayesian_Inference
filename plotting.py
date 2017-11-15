@@ -62,9 +62,24 @@ def plotExample():
     #to continue to run
     plt.show()
     
+def plotQuestionFBarPJ2(J2Mean):
+    plt.figure(1, figsize=(6,4))  #6x4 is the aspect ratio for the plot
 
+    x =np.arange(0, J2Mean)
+    plt.bar(x, J2Mean)
+    plt.xlabel("sample iteration number") #Y-axis label
+    plt.ylabel("sample estimation prob j=2 given alpha, B") #X-axis label
+    #plt.show()
+    plt.savefig("../Figures/QuestionFBar.pdf")
+
+'''
 def plotQuestionFBarPJ2(iters, J2MeanStoresArray):
+    plt.figure(1, figsize=(6,4))  #6x4 is the aspect ratio for the plot
+
     x =np.arange(0, iters)
     plt.bar(x, J2MeanStoresArray)
-    plt.show()
-    
+    plt.xlabel("sample iteration number") #Y-axis label
+    plt.ylabel("sample estimation prob j=2 given alpha, B") #X-axis label
+    #plt.show()
+    plt.savefig("../Figures/QuestionFBar.pdf")
+'''

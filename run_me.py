@@ -1,5 +1,4 @@
 # Import python modules
-from __future__ import division
 
 import numpy as np
 import kaggle
@@ -84,9 +83,8 @@ def MCMCJQuestionF(BArray, a, iters):
     
     JArray = JMeanArray         #initialize J
     print ("initia: ",JArray)
-    J2MeanStoresArray = np.array([0]*iters)
 
-    for i in range(0, 20):
+    for i in range(0, iters):
         #propose new JArray
         JArrayNew = getNewJQuestionE(JArray)
         #acceptance ratio
@@ -97,8 +95,8 @@ def MCMCJQuestionF(BArray, a, iters):
         #mean JArray
         JMeanArray += JArray
         
-        J2MeanStoresArray[i] = JMeanArray[1]/ float(i+1)
-        print("J2MeanStoresArray: ", JMeanArray[1],i, J2MeanStoresArray[i])
+        J2MeanStoresArray[i] = JMeanArray[1]/ (i+1)
+        #print("J2MeanStoresArray: ", JMeanArray[1],i, J2MeanStoresArray[i], JMeanArray[1]/ (i+1))
     JMeanArray = np.divide(JMeanArray, iters)
         
     print("JMeanArray: ", JMeanArray)
@@ -167,7 +165,7 @@ def MCMCAJQuestionJ(a, JArray, BArray, iters):
     aMean = 0      #initialize JMean
     JMeanArray = np.array([0]*len(JArray))       ##initialize JMean
     
-    J2MeanStoresArray = np.array([0]*len(iters))
+    J2MeanStoresArray = np.array([0]*iters, dtype =np.float)
     for i in range(0, iters):
         #propose new alpha and J
         aNew, JArrayNew = getNewAJQuestionI(a, JArray)
@@ -183,7 +181,6 @@ def MCMCAJQuestionJ(a, JArray, BArray, iters):
         aMean += a
         JMeanArray += JArray
         
-        J2MeanStoresArray[i] = (JMeanArray[2]/(i+1))
         #print("JMeanArray: ", JArrayNew)
     
     aMean = aMean / iters
