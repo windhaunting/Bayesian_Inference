@@ -82,8 +82,9 @@ def MCMCJQuestionF(BArray, a, iters):
     for i in range(0, iters):
         #propose new JArray
         JArrayNew = getNewJQuestionE(JArray)
+        print ("JArrayNew: ", JArrayNew)
         #acceptance ratio
-        acceptRatio = getJointAJBQuestionD(JArrayNew, BArray, a) / getJointAJBQuestionD(JArrayNew, BArray, a)
+        acceptRatio = getJointAJBQuestionD(JArrayNew, BArray, a) / getJointAJBQuestionD(JArray, BArray, a)
         
         if np.random.rand(0,1) <= acceptRatio:        #accept new JArray
             JArray = JArrayNew
@@ -95,7 +96,7 @@ def MCMCJQuestionF(BArray, a, iters):
     
     JMeanArray = np.divide(JMeanArray, iters)
         
-    print("JMeanArray: ", JMeanArray, np.mean(JMeanArray))
+    print("JMeanArray: ", JMeanArray)
 
    #PJointAJB = getJointAJBQuestionD(JMeanArray, BArray, a) 
     
