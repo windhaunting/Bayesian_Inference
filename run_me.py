@@ -97,12 +97,12 @@ def MCMCJQuestionF(BArray, a, iters):
         
     print("JMeanArray: ", JMeanArray, np.mean(JMeanArray))
 
-    PJointAJB = getJointAJBQuestionD(JMeanArray, BArray, a) 
+   #PJointAJB = getJointAJBQuestionD(JMeanArray, BArray, a) 
     
-    PAB = getJAQuestionA(JMeanArray, a) * getBJQuestionB(JMeanArray, BArray) * getPriorQuestionC(a)
-    PJGivenAB = PJointAJB / PAB
+   # PAB = getJAQuestionA(JMeanArray, a) * getBJQuestionB(JMeanArray, BArray) * getPriorQuestionC(a)
+   # PJGivenAB = PJointAJB / PAB
 
-    print("PJGivenAB: ", PJGivenAB)
+    #print("PJGivenAB: ", PJGivenAB)
 
 
 
@@ -139,12 +139,12 @@ def MCMCAQuestionH(JArray, BArray, iters):
         
     print("aMean: ", aMean)
 
-    PJointAJB = getJointAJBQuestionD(JArray, BArray, aMean) 
+    #PJointAJB = getJointAJBQuestionD(JArray, BArray, aMean) 
     
-    PJB = getJAQuestionA(JArray, aMean) * getBJQuestionB(JArray, BArray) * getPriorQuestionC(aMean)
-    PAGivenJB = PJointAJB / PJB
+    # PJB = getJAQuestionA(JArray, aMean) * getBJQuestionB(JArray, BArray) * getPriorQuestionC(aMean)
+    #PAGivenJB = PJointAJB / PJB
 
-    print("PAGivenJB: ", PAGivenJB)
+   # print("PAGivenJB: ", PAGivenJB)
     
 
 
