@@ -64,9 +64,10 @@ def getNewJQuestionE(JArray):
     Jnew. This is calculated by randomly selecting a Ji and flipping its value.
     '''
     index = random.randint(0,len(JArray)-1)
-    JArray[index] = 0 if JArray[index] == 1 else 1
-
-    return JArray
+    JArrayNew = JArray.copy()
+    JArrayNew[index] = 0 if JArrayNew[index] == 1 else 1
+     
+    return JArrayNew
 
 
 
@@ -78,17 +79,21 @@ def MCMCJQuestionF(BArray, a, iters):
     JMeanArray = np.array([0]*len(BArray))       ##initialize JMean
     
     JArray = JMeanArray         #initialize J
-    
+    print ("initia: ",JArray)
+
     for i in range(0, iters):
         #propose new JArray
+        #print ("JArray: ",JArray)
+
         JArrayNew = getNewJQuestionE(JArray)
-        print ("JArrayNew: ", JArrayNew)
+        #print ("JArrayNew: ", JArray, JArrayNew)
         #acceptance ratio
-        acceptRatio = getJointAJBQuestionD(JArrayNew, BArray, a) / getJointAJBQuestionD(JArray, BArray, a)
-        
+        acceptRatio =  getJointAJBQuestionD(JArrayNew, BArray, a) / getJointAJBQuestionD(JArray, BArray, a)
+        print ("acceptRatio: ",acceptRatio)
         if np.random.rand(0,1) <= acceptRatio:        #accept new JArray
-            JArray = JArrayNew
-        
+            JArray = JArrayNew.copy()
+            print ("enter here: ",acceptRatio)
+
         #mean JArray
         JMeanArray += JArray
     
