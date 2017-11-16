@@ -5,7 +5,7 @@ import kaggle
 import random
 
 from plotting import plotQuestionFBarPJ2
-
+from plotting import  plotQuestionHHistPA
 ################################################
     
 def getJAQuestionA(JArray, a):
@@ -119,7 +119,7 @@ def MCMCAQuestionH(JArray, BArray, iters):
     aMean = 0       #initialize JMean
     
     a = aMean
-    aMeanStore = np.array([0]*iters)
+    aMeanStore = np.array([0]*iters, dtype=float)
     for i in range(0, iters):
         #propose new alpha
         aNew = getNewAQuestionG(a)
@@ -130,9 +130,9 @@ def MCMCAQuestionH(JArray, BArray, iters):
             a = aNew
         #mean alpha
         aMean += a
-        
+        aMeanStore[i] = aMean/(i+1)
     aMean = aMean / iters
-    return aMean
+    return aMean, aMeanStore
 
 
 def getNewAJQuestionI(a, JArray):
@@ -292,7 +292,7 @@ if __name__== "__main__":
     print ("Flipped JArrayNew: ", JArrayNew)
 
     
-    
+    '''
     print ("beginning Question 1f")
     BArray = np.array([1,0,0,1,1])
     a = 0.5
@@ -300,9 +300,10 @@ if __name__== "__main__":
     JMeanArray = MCMCJQuestionF(BArray, a, iters)
     print (" JMeanArray: ", JMeanArray)
     
-    #plotQuestionFBarPJ2([JMeanArray[2], 1-JMeanArray[2]])
+    plotQuestionFBarPJ2([JMeanArray[2], 1-JMeanArray[2]])
     
     
+    '''
     BArray = np.array([1,0,0,0,1,0,1,1])
     a = 0.11
     iters = 10000
@@ -323,22 +324,32 @@ if __name__== "__main__":
     print ("proposed aNew: ", aNew)
     
     
-    '''
+    
     print ("beginning Question 1h")
     JArray= np.array([0,1,0,1,0])
     BArray = np.array([1,0,1,0,1])
     iters = 10000
-    aMean = MCMCAQuestionH(JArray, BArray, iters)
+    aMean, aMeanStore = MCMCAQuestionH(JArray, BArray, iters)
     print("aMean: ", aMean)
 
     
     JArray = np.array([0,0,0,0,0])
     BArray = np.array([1,1,1,1,1])
     iters = 10000   #10000
-    aMean = MCMCAQuestionH(JArray, BArray, iters)
+    aMean, aMeanStore = MCMCAQuestionH(JArray, BArray, iters)
     print("aMean: ", aMean)
     
-    '''
+    
+    JArray = np.array([0,1,1,0,1])
+    BArray = np.array([1,0,0,1,1])
+    iters = 10000   #10000
+    aMean, aMeanStore = MCMCAQuestionH(JArray, BArray, iters)
+    print("aMean: ", aMean)
+    # plotQuestionHHistPA(aMeanStore)
+    
+    
+    
+    
     a = 0.6
     Jn = 1
     pBnext = getNextBallQuestionK(Jn, a)

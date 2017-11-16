@@ -68,20 +68,24 @@ def plotQuestionFBarPJ2(J2Mean):
 
     x = np.arange(0, len(J2Mean))            #2. algorithm for you homework p
     plt.bar(x, J2Mean)
+    plt.title('Bar plot of J2 given alpha, B')
+
     plt.xlabel("j2 value") #Y-axis label
-    plt.ylabel("sample estimation prob j2 given alpha, B") #X-axis label
+    plt.ylabel("sample estimation prob J2 given alpha, B") #X-axis label
     #plt.show()
     plt.savefig("../Figures/QuestionFBar.pdf")
 
 
-'''
-def plotQuestionFBarPJ2(iters, J2MeanStoresArray):
+
+def plotQuestionHHistPA(aMeanStore):
     plt.figure(1, figsize=(6,4))  #6x4 is the aspect ratio for the plot
 
-    x =np.arange(0, iters)
-    plt.bar(x, J2MeanStoresArray)
-    plt.xlabel("sample iteration number") #Y-axis label
-    plt.ylabel("sample estimation prob j=2 given alpha, B") #X-axis label
-    #plt.show()
-    plt.savefig("../Figures/QuestionFBar.pdf")
-'''
+    plt.hist(aMeanStore, 50, normed=1, facecolor='g', alpha=0.75)
+    
+    plt.xlabel('alpha value')
+    plt.ylabel('Prob alpha given J,B')
+    plt.title('Histogram of Prob alpha given J, B with 10,000 iteration sampling')
+    plt.axis([0, 1, 0, 0.03])
+    plt.savefig("../Figures/QuestionHHistogram.pdf")
+
+    plt.show()
