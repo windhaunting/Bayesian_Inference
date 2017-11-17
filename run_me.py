@@ -148,11 +148,14 @@ def getNewAJQuestionI(a, JArray):
     return aNew, JArrayNew
  
     
-def MCMCAJQuestionJ(a, JArray, BArray, iters):
+def MCMCAJQuestionJ(BArray, iters):
     '''
-    Use Metropolis Hastings algorithm to draw sample from P(Ja|B)
+    Use Metropolis Hastings algorithm to draw sample from P(J,a|B)
+    '''
     
-    '''
+    a = 0.01  
+    JArray = np.array([0]*len(BArray))       ##initialize JMean
+
     aMean = a      #initialize JMean
     JMeanArray = JArray #np.array([0]*len(JArray))       ##initialize JMean
     aStore = np.array([0]*iters, dtype=float)
@@ -196,7 +199,18 @@ def getNextBallQuestionK(Jn, a):
        
     return pBnext
     
+
+def getNextBallMCMCQuestionl(BArray, iters):
     
+    aMean, JMeanArray, aStore = MCMCAJQuestionJ(BArray, iters)
+    JMean = JMeanArray[-1]
+    if JMean >= 0.5:
+        Jn = 1
+    else:
+        Jn = 0
+    pBnext = getNextBallQuestionK(Jn, aMean)
+    
+    return pBnext
     
 if __name__== "__main__":
 
@@ -353,18 +367,16 @@ if __name__== "__main__":
     
     
     print ("beginning Question 1j")
-    a = 0.01            
+             
     BArray = np.array([1,1,0,1,1,0,0,0])
     iters = 10000
-    JArray = np.array([0]*len(BArray))       ##initialize JMean
-
-    aMean, JMeanArray, aStore = MCMCAJQuestionJ(a, JArray, BArray, iters)
+    aMean, JMeanArray, aStore = MCMCAJQuestionJ( BArray, iters)
          
     #plotQuestionJBarProbJ(JMeanArray)
     #plotQuestionJHistPAlpha(aStore)
-    plotQuestionJAlphaIteration(aStore)
+    #plotQuestionJAlphaIteration(aStore)
     
-    '''
+    
     print ("beginning Question 1k")
     a = 0.6
     Jn = 1
@@ -385,8 +397,29 @@ if __name__== "__main__":
     Jn = 0
     pBnext = getNextBallQuestionK(Jn, a)
     print ("Question k pBnext : ", pBnext) 
-     
 
+    '''
+
+    print ("beginning Question 1l")
+    BArray = np.array([0, 0, 1])
+    iters = 10000
+    pBnext = getNextBallMCMCQuestionl(BArray, iters)
+    print ("Question l pBnext : ", pBnext) 
+    
+    BArray = np.array([0, 1, 0, 1, 0, 1])
+    iters = 10000
+    pBnext = getNextBallMCMCQuestionl(BArray, iters)
+    print ("Question l pBnext : ", pBnext) 
+    
+    BArray = np.array([0, 1, 0, 0, 0, 0, 0])
+    iters = 10000
+    pBnext = getNextBallMCMCQuestionl(BArray, iters)
+    print ("Question l pBnext : ", pBnext) 
+
+    BArray = np.array([1, 1, 1, 1, 1])
+    iters = 10000
+    pBnext = getNextBallMCMCQuestionl(BArray, iters)
+    print ("Question l pBnext : ", pBnext) 
     
     
 '''
