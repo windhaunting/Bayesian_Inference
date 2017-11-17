@@ -126,7 +126,7 @@ def MCMCAQuestionH(JArray, BArray, iters):
         #propose new alpha
         aNew = getNewAQuestionG(a)
         #acceptance ratio
-        acceptRatio = getJointAJBQuestionD(JArray, BArray, aNew) / (getJointAJBQuestionD(JArray, BArray, a) + 1e-200)
+        acceptRatio = getJointAJBQuestionD(JArray, BArray, aNew) / getJointAJBQuestionD(JArray, BArray, a)
         if np.random.rand() <= acceptRatio:        #accept new JArray
             a = aNew
         #mean alpha
