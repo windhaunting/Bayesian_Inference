@@ -18,7 +18,8 @@ def getJAQuestionA(JArray, a):
     JArray: a sequence of jar
     a is the model paameter deciding the next jar same as the previous one or not
     '''
- 
+    if JArray[0] == 1:
+        return 0.0
     PJGivenA = 1          #prob of jar sequence given  \alpha
     for i in range(1, len(JArray)):
         PJGivenA = PJGivenA * a if JArray[i] == JArray[i-1] else PJGivenA * (1-a)
@@ -218,21 +219,16 @@ def getNextBallMCMCQuestionl(BArray, iters):
 
     a = 0.01  
     JArray = np.array([0]*len(BArray))       ##initialize JMean
-
-    aMean = a      #initialize JMean
-    #JMeanArray = JArray #np.array([0]*len(JArray))       ##initialize JMean
     prob = 0
     for i in range(0, iters):
         #propose new alpha and J
         aNew, JArrayNew = getNewAJQuestionI(a, JArray)
         #acceptance ratio
         acceptRatio = getJointAJBQuestionD(JArrayNew, BArray, aNew) / getJointAJBQuestionD(JArray, BArray, a)
-        
         if np.random.rand() <= acceptRatio:        #accept new JArray
             a = aNew
             JArray = JArrayNew
             #mean alpha and JArray
-        aMean += a
         if JArray[-1] >= 0.5:
             Jn = 1
         else:
@@ -240,6 +236,18 @@ def getNextBallMCMCQuestionl(BArray, iters):
         prob += getNextBallQuestionK(Jn, a)
     return prob/iters       
         
+
+def readDataBallState():
+    lengths = [10, 15, 20, 25]
+    prediction_prob = list()
+    for l in lengths:
+        B_array = np.loadtxt('../../Data/B_sequences_%s.txt' % (l), delimiter=',', dtype=float)
+        for b in np.arange(B_array.shape[0]):
+            prediction_prob.append(np.random.rand(1))
+            print('Prob of next entry in ', B_array[b, :], 'is black is', prediction_prob[-1])
+
+
+
 if __name__== "__main__":
 
     ################################################
@@ -428,7 +436,6 @@ if __name__== "__main__":
     pBnext = getNextBallQuestionK(Jn, a)
     print ("Question k pBnext : ", pBnext) 
 
-    '''
 
     print ("beginning Question 1l")
     BArray = np.array([0, 0, 1])
@@ -451,6 +458,10 @@ if __name__== "__main__":
     pBnext = getNextBallMCMCQuestionl(BArray, iters)
     print ("Question l pBnext : ", pBnext) 
     
+    '''
+    print ("beginning Question 1m")
+    readDataBallState()
+
     
 '''
 	print('1m')
