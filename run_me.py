@@ -237,17 +237,22 @@ def getNextBallMCMCQuestionl(BArray, iters):
     return prob/iters       
         
 
-def readDataBallState():
-    lengths = [10, 15, 20, 25]
-    prediction_prob = list()
-    for l in lengths:
-        B_array = np.loadtxt('../../Data/B_sequences_%s.txt' % (l), delimiter=',', dtype=float)
-        for b in np.arange(B_array.shape[0]):
-            prediction_prob.append(np.random.rand(1))
-            print('Prob of next entry in ', B_array[b, :], 'is black is', prediction_prob[-1])
 
-
-
+def predictNextBallBayesInference(file_name):
+    iterations = np.arange(10000, 1000000, 10000) #[100000] #np.arange(10000, 1000000, 10000)
+    for iters in iterations:
+        prediction_prob = list()
+        lengths = [10, 15, 20, 25]
+        for l in lengths:
+            BArray = np.loadtxt('../../Data/B_sequences_%s.txt' % (l), delimiter=',', dtype=float)
+            for b in np.arange(BArray.shape[0]):
+                prob = getNextBallMCMCQuestionl(BArray[b, :], iters)
+                prediction_prob.append(prob)
+                #print('Prob of next entry in ', BArray[b, :], 'is black is', prediction_prob[-1])
+                #print('Prob of next entry in is black is', prediction_prob[-1])
+        #print('Writing output to ', file_name + "_iteration_" + str(iters))
+        kaggle.kaggleize(np.array(prediction_prob), file_name + "iteration_" + str(iters))
+    
 if __name__== "__main__":
 
     ################################################
@@ -460,8 +465,8 @@ if __name__== "__main__":
     
     '''
     print ("beginning Question 1m")
-    readDataBallState()
-
+    file_name = '../Predictions/best.csv'
+    predictNextBallBayesInference(file_name)
     
 '''
 	print('1m')
