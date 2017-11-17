@@ -8,6 +8,8 @@ from plotting import plotQuestionFBarPJ2
 from plotting import  plotQuestionHHistPA
 from plotting import plotQuestionJBarProbJ
 from plotting import plotQuestionJHistPAlpha
+from plotting import plotQuestionJAlphaIteration
+
 ################################################
     
 def getJAQuestionA(JArray, a):
@@ -293,9 +295,7 @@ if __name__== "__main__":
     print (" JMeanArray: ", JMeanArray)
     
     plotQuestionFBarPJ2([JMeanArray[2], 1-JMeanArray[2]])
-        
-    
-    
+
     
     BArray = np.array([1,0,0,0,1,0,1,1])
     a = 0.11
@@ -325,21 +325,18 @@ if __name__== "__main__":
     aMean, aMeanStore = MCMCAQuestionH(JArray, BArray, iters)
     print("aMean: ", aMean)
 
-    
     JArray = np.array([0,0,0,0,0])
     BArray = np.array([1,1,1,1,1])
     iters = 10000   #10000
     aMean, aMeanStore = MCMCAQuestionH(JArray, BArray, iters)
     print("aMean: ", aMean)
     
-   
-    
     JArray = np.array([0,1,1,0,1])
     BArray = np.array([1,0,0,1,1])
     iters = 10000   #10000
-    aMean, aMeanStore = MCMCAQuestionH(JArray, BArray, iters)
+    aMean, aStore = MCMCAQuestionH(JArray, BArray, iters)
     print("aMean: ", aMean)
-    plotQuestionHHistPA(aMeanStore)
+    plotQuestionHHistPA(aStore)
     
     JArray = np.array([0,1,1,1,1,1,1,0])
     BArray = np.array([1,0,0,1,1,0,0,1])
@@ -353,8 +350,9 @@ if __name__== "__main__":
     aMean, aMeanStore = MCMCAQuestionH(JArray, BArray, iters)
     print("aMeanStore: ", aMean, aMeanStore)
     
-    '''
     
+    '''
+    print ("beginning Question 1j")
     a = 0.01            
     BArray = np.array([1,1,0,1,1,0,0,0])
     iters = 10000
@@ -362,13 +360,12 @@ if __name__== "__main__":
 
     aMean, JMeanArray, aStore = MCMCAJQuestionJ(a, JArray, BArray, iters)
          
-    
-    plotQuestionJBarProbJ(JMeanArray)
-    
-    plotQuestionJHistPAlpha(aStore)
+    #plotQuestionJBarProbJ(JMeanArray)
+    #plotQuestionJHistPAlpha(aStore)
+    plotQuestionJAlphaIteration(aStore)
     
     '''
-    
+    print ("beginning Question 1k")
     a = 0.6
     Jn = 1
     pBnext = getNextBallQuestionK(Jn, a)
