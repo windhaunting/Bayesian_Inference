@@ -197,21 +197,49 @@ def getNextBallQuestionK(Jn, a):
        
     return pBnext
     
-
+'''
 def getNextBallMCMCQuestionl(BArray, iters):
     
     aMean, JMeanArray, aStore = MCMCAJQuestionJ(BArray, iters)
     print ("JMeanArray : ", aMean, JMeanArray)
     JMean = JMeanArray[-1]
-    Jn = 0
+    Jn = 1
     if JMean >= 0.5:
         Jn = 1
     else:
         Jn = 0
+    print ("Jn : ", Jn)
     pBnext = getNextBallQuestionK(Jn, aMean)
     
     return pBnext
-    
+'''
+
+def getNextBallMCMCQuestionl(BArray, iters):
+
+    a = 0.01  
+    JArray = np.array([0]*len(BArray))       ##initialize JMean
+
+    aMean = a      #initialize JMean
+    #JMeanArray = JArray #np.array([0]*len(JArray))       ##initialize JMean
+    prob = 0
+    for i in range(0, iters):
+        #propose new alpha and J
+        aNew, JArrayNew = getNewAJQuestionI(a, JArray)
+        #acceptance ratio
+        acceptRatio = getJointAJBQuestionD(JArrayNew, BArray, aNew) / getJointAJBQuestionD(JArray, BArray, a)
+        
+        if np.random.rand() <= acceptRatio:        #accept new JArray
+            a = aNew
+            JArray = JArrayNew
+            #mean alpha and JArray
+        aMean += a
+        if JArray[-1] >= 0.5:
+            Jn = 1
+        else:
+            Jn = 0
+        prob += getNextBallQuestionK(Jn, a)
+    return prob/iters       
+        
 if __name__== "__main__":
 
     ################################################
