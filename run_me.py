@@ -178,8 +178,6 @@ def MCMCAJQuestionJ(BArray, iters):
     aMean = aMean / iters
     JMeanArray = np.divide(JMeanArray, iters)
     
-    print("QuestoinJ aMean: ", aMean)
-    print("QuestionJ JMeanArray: ", JMeanArray)
     
     return aMean, JMeanArray, aStore
 
@@ -203,7 +201,9 @@ def getNextBallQuestionK(Jn, a):
 def getNextBallMCMCQuestionl(BArray, iters):
     
     aMean, JMeanArray, aStore = MCMCAJQuestionJ(BArray, iters)
+    print ("JMeanArray : ", aMean, JMeanArray)
     JMean = JMeanArray[-1]
+    Jn = 0
     if JMean >= 0.5:
         Jn = 1
     else:
@@ -371,7 +371,9 @@ if __name__== "__main__":
     BArray = np.array([1,1,0,1,1,0,0,0])
     iters = 10000
     aMean, JMeanArray, aStore = MCMCAJQuestionJ( BArray, iters)
-         
+    print("QuestoinJ aMean: ", aMean)
+    print("QuestionJ JMeanArray: ", JMeanArray)
+    
     #plotQuestionJBarProbJ(JMeanArray)
     #plotQuestionJHistPAlpha(aStore)
     #plotQuestionJAlphaIteration(aStore)
