@@ -107,7 +107,6 @@ def getNewAQuestionG(a):
     a new proposed value for α with input argument α and output
     αnew. This is calculated by selecting a new α value uniformly at random
     '''
-    
     aNew = np.random.random_sample()
     return aNew
 
@@ -156,7 +155,7 @@ def MCMCAJQuestionJ(a, JArray, BArray, iters):
         #propose new alpha and J
         aNew, JArrayNew = getNewAJQuestionI(a, JArray)
         #acceptance ratio
-        acceptRatio = getJointAJBQuestionD(JArrayNew, BArray, aNew) / getJointAJBQuestionD(JArray, BArray, a)
+        acceptRatio = getJointAJBQuestionD(JArrayNew, BArray, aNew) / (getJointAJBQuestionD(JArray, BArray, a)  + 1e-200)
         
         if np.random.rand(0,1) <= acceptRatio:        #accept new JArray
             a = aNew
@@ -172,17 +171,10 @@ def MCMCAJQuestionJ(a, JArray, BArray, iters):
     aMean = aMean / iters
     JMeanArray = np.divide(JMeanArray, iters)
     
-    print("aMean: ", aMean)
-    print("JMeanArray: ", JMeanArray, np.mean(JMeanArray))
+    print("QuestoinJ aMean: ", aMean)
+    print("QuestionJ JMeanArray: ", JMeanArray)
     
-    
-    PJointAJB = getJointAJBQuestionD(JArray, BArray, aMean) 
-    
-    PJB = getJAQuestionA(JArray, aMean) * getBJQuestionB(JArray, BArray) * getPriorQuestionC(aMean)
-    PAGivenJB = PJointAJB / PJB
-
-    print("PAGivenJB: ", PAGivenJB)
-    
+    return aMean, JMeanArray
 
 
 def getNextBallQuestionK(Jn, a):
@@ -323,7 +315,6 @@ if __name__== "__main__":
     print ("proposed aNew: ", aNew)
     
     
-    '''
     
     print ("beginning Question 1h")
     JArray= np.array([0,1,0,1,0])
@@ -358,11 +349,18 @@ if __name__== "__main__":
     iters = 10000   #10000
     aMean, aMeanStore = MCMCAQuestionH(JArray, BArray, iters)
     print("aMeanStore: ", aMeanStore)
+    '''
     
-    
-    
+    a = 0            
+    BArray = np.array([1,1,0,1,1,0,0,0])
+    iters = 10000
+    JArray = np.array([0]*len(BArray))       ##initialize JMean
+
+    aMean, JMeanArray = MCMCAJQuestionJ(a, JArray, BArray, iters)
+         
     
     '''
+    
     a = 0.6
     Jn = 1
     pBnext = getNextBallQuestionK(Jn, a)
