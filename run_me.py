@@ -6,6 +6,8 @@ import random
 
 from plotting import plotQuestionFBarPJ2
 from plotting import  plotQuestionHHistPA
+from plotting import plotQuestionJBarProbJ
+from plotting import plotQuestionJHistPAlpha
 ################################################
     
 def getJAQuestionA(JArray, a):
@@ -117,7 +119,7 @@ def MCMCAQuestionH(JArray, BArray, iters):
     '''
     aMean = 0.01       #initialize JMean
     a = aMean
-    aMeanStore = np.array([0]*iters, dtype=float)
+    aStore = np.array([0]*iters, dtype=float)
     for i in range(0, iters):
         #propose new alpha
         aNew = getNewAQuestionG(a)
@@ -127,11 +129,10 @@ def MCMCAQuestionH(JArray, BArray, iters):
             a = aNew
         #mean alpha
         aMean += a
-         
-        aMeanStore[i] = format(a, '.4f')
+        aStore[i] = format(a, '.4f')
         
     aMean = aMean / iters
-    return aMean, aMeanStore
+    return aMean, aStore
 
 
 def getNewAJQuestionI(a, JArray):
@@ -152,12 +153,12 @@ def MCMCAJQuestionJ(a, JArray, BArray, iters):
     '''
     aMean = a      #initialize JMean
     JMeanArray = JArray #np.array([0]*len(JArray))       ##initialize JMean
-    
+    aStore = np.array([0]*iters, dtype=float)
     for i in range(0, iters):
         #propose new alpha and J
         aNew, JArrayNew = getNewAJQuestionI(a, JArray)
         #acceptance ratio
-        acceptRatio = getJointAJBQuestionD(JArrayNew, BArray, aNew) / (getJointAJBQuestionD(JArray, BArray, a)  + 1e-200)
+        acceptRatio = getJointAJBQuestionD(JArrayNew, BArray, aNew) / getJointAJBQuestionD(JArray, BArray, a)
         
         if np.random.rand() <= acceptRatio:        #accept new JArray
             a = aNew
@@ -167,8 +168,7 @@ def MCMCAJQuestionJ(a, JArray, BArray, iters):
         #mean alpha and JArray
         aMean += a
         JMeanArray += JArray
-        
-        #print("JMeanArray: ", JArrayNew)
+        aStore[i] = format(a, '.4f')
     
     aMean = aMean / iters
     JMeanArray = np.divide(JMeanArray, iters)
@@ -176,7 +176,7 @@ def MCMCAJQuestionJ(a, JArray, BArray, iters):
     print("QuestoinJ aMean: ", aMean)
     print("QuestionJ JMeanArray: ", JMeanArray)
     
-    return aMean, JMeanArray
+    return aMean, JMeanArray, aStore
 
 
 def getNextBallQuestionK(Jn, a):
@@ -332,7 +332,7 @@ if __name__== "__main__":
     aMean, aMeanStore = MCMCAQuestionH(JArray, BArray, iters)
     print("aMean: ", aMean)
     
-    '''
+   
     
     JArray = np.array([0,1,1,0,1])
     BArray = np.array([1,0,0,1,1])
@@ -345,25 +345,29 @@ if __name__== "__main__":
     BArray = np.array([1,0,0,1,1,0,0,1])
     iters = 10000   #10000
     aMean, aMeanStore = MCMCAQuestionH(JArray, BArray, iters)
-    print("aMeanStore: ", aMeanStore)
+    print("aMeanStore: ", aMean, aMeanStore)
     
     JArray = np.array([0,1,1,0,1,0])
     BArray = np.array([1,0,0,1,1,1])
     iters = 10000   #10000
     aMean, aMeanStore = MCMCAQuestionH(JArray, BArray, iters)
-    print("aMeanStore: ", aMeanStore)
-    
+    print("aMeanStore: ", aMean, aMeanStore)
     
     '''
-    a = 1e-100            
+    
+    a = 0.01            
     BArray = np.array([1,1,0,1,1,0,0,0])
     iters = 10000
     JArray = np.array([0]*len(BArray))       ##initialize JMean
 
-    aMean, JMeanArray = MCMCAJQuestionJ(a, JArray, BArray, iters)
+    aMean, JMeanArray, aStore = MCMCAJQuestionJ(a, JArray, BArray, iters)
          
     
+    plotQuestionJBarProbJ(JMeanArray)
     
+    plotQuestionJHistPAlpha(aStore)
+    
+    '''
     
     a = 0.6
     Jn = 1
