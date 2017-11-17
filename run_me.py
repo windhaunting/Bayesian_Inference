@@ -351,7 +351,7 @@ if __name__== "__main__":
     print("aMeanStore: ", aMean, aMeanStore)
     
     
-    '''
+    
     print ("beginning Question 1j")
     a = 0.01            
     BArray = np.array([1,1,0,1,1,0,0,0])
@@ -386,7 +386,7 @@ if __name__== "__main__":
     pBnext = getNextBallQuestionK(Jn, a)
     print ("Question k pBnext : ", pBnext) 
      
-    '''
+
     
     
 '''
