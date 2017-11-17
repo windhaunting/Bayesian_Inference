@@ -79,7 +79,7 @@ def plotQuestionJAlphaIteration(aStore):
 
     x = np.arange(0, len(aStore))            #2. algorithm for you homework p
     plt.scatter(x, aStore)
-    plt.title('plot of alpha for iterations  for Question J')
+    plt.title('Plot of alpha with iterations for Question J')
 
     plt.xlabel("Iteration") #Y-axis label
     plt.ylabel("Alpha value") #X-axis label
