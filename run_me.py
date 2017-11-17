@@ -115,7 +115,7 @@ def MCMCAQuestionH(JArray, BArray, iters):
     '''
     Use Metropolis Hastings algorithm to draw sample from P(J|a,B)
     '''
-    aMean = 0       #initialize JMean
+    aMean = 0.01       #initialize JMean
     a = aMean
     aMeanStore = np.array([0]*iters, dtype=float)
     for i in range(0, iters):
@@ -127,7 +127,9 @@ def MCMCAQuestionH(JArray, BArray, iters):
             a = aNew
         #mean alpha
         aMean += a
-        aMeanStore[i] = format(aMean/(i+1), '.4f')
+         
+        aMeanStore[i] = format(a, '.4f')
+        
     aMean = aMean / iters
     return aMean, aMeanStore
 
@@ -148,8 +150,8 @@ def MCMCAJQuestionJ(a, JArray, BArray, iters):
     Use Metropolis Hastings algorithm to draw sample from P(Ja|B)
     
     '''
-    aMean = 0      #initialize JMean
-    JMeanArray = np.array([0]*len(JArray))       ##initialize JMean
+    aMean = a      #initialize JMean
+    JMeanArray = JArray #np.array([0]*len(JArray))       ##initialize JMean
     
     for i in range(0, iters):
         #propose new alpha and J
@@ -157,7 +159,7 @@ def MCMCAJQuestionJ(a, JArray, BArray, iters):
         #acceptance ratio
         acceptRatio = getJointAJBQuestionD(JArrayNew, BArray, aNew) / (getJointAJBQuestionD(JArray, BArray, a)  + 1e-200)
         
-        if np.random.rand(0,1) <= acceptRatio:        #accept new JArray
+        if np.random.rand() <= acceptRatio:        #accept new JArray
             a = aNew
             JArray = JArrayNew
             
@@ -330,13 +332,14 @@ if __name__== "__main__":
     aMean, aMeanStore = MCMCAQuestionH(JArray, BArray, iters)
     print("aMean: ", aMean)
     
+    '''
     
     JArray = np.array([0,1,1,0,1])
     BArray = np.array([1,0,0,1,1])
     iters = 10000   #10000
     aMean, aMeanStore = MCMCAQuestionH(JArray, BArray, iters)
     print("aMean: ", aMean)
-    # plotQuestionHHistPA(aMeanStore)
+    plotQuestionHHistPA(aMeanStore)
     
     JArray = np.array([0,1,1,1,1,1,1,0])
     BArray = np.array([1,0,0,1,1,0,0,1])
@@ -349,9 +352,10 @@ if __name__== "__main__":
     iters = 10000   #10000
     aMean, aMeanStore = MCMCAQuestionH(JArray, BArray, iters)
     print("aMeanStore: ", aMeanStore)
-    '''
     
-    a = 0            
+    
+    '''
+    a = 1e-100            
     BArray = np.array([1,1,0,1,1,0,0,0])
     iters = 10000
     JArray = np.array([0]*len(BArray))       ##initialize JMean
@@ -359,7 +363,7 @@ if __name__== "__main__":
     aMean, JMeanArray = MCMCAJQuestionJ(a, JArray, BArray, iters)
          
     
-    '''
+    
     
     a = 0.6
     Jn = 1

@@ -85,7 +85,7 @@ def plotQuestionHHistPA(aMeanStore):
     plt.xlabel('alpha value')
     plt.ylabel('Prob alpha given J,B')
     plt.title('Histogram of Prob alpha given J, B with 10,000 iteration sampling')
-    plt.axis([0, 1, 0, 0.03])
+    plt.axis([0, 1, 0, 3])
     plt.savefig("../Figures/QuestionHHistogram.pdf")
 
     plt.show()
