@@ -1,4 +1,7 @@
 # Import python modules
+'''
+@author: fubao
+'''
 
 import numpy as np
 import kaggle
