@@ -250,7 +250,7 @@ def predictNextBallBayesInference(file_name):
                 prediction_prob.append(prob)
                 #print('Prob of next entry in ', BArray[b, :], 'is black is', prediction_prob[-1])
                 #print('Prob of next entry in is black is', prediction_prob[-1])
-        #print('Writing output to ', file_name + "_iteration_" + str(iters))
+        print('Writing output to ', file_name + "_iteration_" + str(iters))
         kaggle.kaggleize(np.array(prediction_prob), file_name + "iteration_" + str(iters))
     
 if __name__== "__main__":
@@ -406,6 +406,7 @@ if __name__== "__main__":
     print("aMeanStore: ", aMean, aMeanStore)
     
     
+    '''
     
     print ("beginning Question 1j")
              
@@ -417,9 +418,9 @@ if __name__== "__main__":
     
     #plotQuestionJBarProbJ(JMeanArray)
     #plotQuestionJHistPAlpha(aStore)
-    #plotQuestionJAlphaIteration(aStore)
+    plotQuestionJAlphaIteration(aStore)
     
-    
+    '''
     print ("beginning Question 1k")
     a = 0.6
     Jn = 1
@@ -463,27 +464,10 @@ if __name__== "__main__":
     pBnext = getNextBallMCMCQuestionl(BArray, iters)
     print ("Question l pBnext : ", pBnext) 
     
-    '''
+    
     print ("beginning Question 1m")
     file_name = '../Predictions/best.csv'
     predictNextBallBayesInference(file_name)
     
-'''
-	print('1m')
-	lengths = [10, 15, 20, 25]
-	prediction_prob = list()
-	for l in lengths:
-		B_array = np.loadtxt('../../Data/B_sequences_%s.txt' % (l), delimiter=',', dtype=float)
-		for b in np.arange(B_array.shape[0]):
-			prediction_prob.append(np.random.rand(1))
-			print('Prob of next entry in ', B_array[b, :], 'is black is', prediction_prob[-1])
-
-	# Output file location
-	file_name = '../Predictions/best.csv'
-
-	# Writing output in Kaggle format
-	print('Writing output to ', file_name)
-	kaggle.kaggleize(np.array(prediction_prob), file_name)
-
-
-'''
+    '''
+	

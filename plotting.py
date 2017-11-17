@@ -78,7 +78,7 @@ def plotQuestionJAlphaIteration(aStore):
     plt.figure(5, figsize=(6,4))  #6x4 is the aspect ratio for the plot
 
     x = np.arange(0, len(aStore))            #2. algorithm for you homework p
-    plt.scatter(x, aStore)
+    plt.plot(x, aStore)
     plt.title('Plot of alpha with iterations for Question J')
 
     plt.xlabel("Iteration") #Y-axis label
