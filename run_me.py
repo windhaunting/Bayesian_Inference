@@ -173,7 +173,6 @@ def MCMCAJQuestionJ(BArray, iters):
             a = aNew
             JArray = JArrayNew
             
-        
         #mean alpha and JArray
         aMean += a
         JMeanArray += JArray

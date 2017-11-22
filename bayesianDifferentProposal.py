@@ -8,6 +8,7 @@ Created on Fri Nov 17 18:01:12 2017
 
 from run_me import getNewAJQuestionI
 from run_me import getJointAJBQuestionD
+import numpy as np
 
 #for extra credit
 
@@ -18,10 +19,14 @@ from run_me import getJointAJBQuestionD
 #original uniform for alpha and flipping for J
 
 
-def normallFuction():
-    
-    x = 1
 
+def normallFuctionAlpha():
+    '''
+    use standard deviation for alpha
+    '''
+    newAlpha = np.random.normal(0, 1, None)
+
+    return newAlpha
 
 def MCMCATestConvergeTime(BArray, iters):
     '''
