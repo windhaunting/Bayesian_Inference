@@ -9,6 +9,7 @@ Created on Fri Nov 17 18:01:12 2017
 from run_me import getNewAJQuestionI
 from run_me import getNewJQuestionE
 from run_me import getJointAJBQuestionD
+from run_me import getNewAQuestionG
 import numpy as np
 
 import time
@@ -23,19 +24,27 @@ import time
 
 
 
-def normallFuctionAlpha():
+def normallFuctionAlpha(a):
     '''
-    use standard deviation for alpha
+    use normal distribution sampling for alpha
     '''
     newAlpha = np.random.normal(0, 1, None)
 
+    return newAlpha
+
+
+def normalFunctionGamma(a):
+    '''
+    use gamma function for alpha
+    '''
+    newAlpha = np.random.gamma(1, 1, None)
     return newAlpha
 
 def MCMCATestConvergeTime(BArray, iters):
     '''
     Use Metropolis Hastings algorithm to draw sample from P(J,a|B)
     '''
-    error = 0.01
+    error = 1e-8
     
     a = 0.01  
     JArray = np.array([0]*len(BArray))       ##initialize JMean
@@ -44,25 +53,31 @@ def MCMCATestConvergeTime(BArray, iters):
     JMeanArray = JArray #np.array([0]*len(JArray))       ##initialize JMean
     aStore = np.array([0]*iters, dtype=float)
     beginTime = time.time()
-    
+    preAMean = 0
     for i in range(0, iters):
         #propose new alpha and J
-        aNew = normallFuctionAlpha(a)
-        JArrayNew = getNewJQuestionE()
+        aNew = getNewAQuestionG(a)
+        #aNew = normallFuctionAlpha(a)
+        #aNew = normalFunctionGamma(a)
+        JArrayNew = getNewJQuestionE(JArray)
         #acceptance ratio
         acceptRatio = getJointAJBQuestionD(JArrayNew, BArray, aNew) / getJointAJBQuestionD(JArray, BArray, a)
         
         if np.random.rand() <= acceptRatio:        #accept new JArray
             a = aNew
             JArray = JArrayNew
-            
         
         #mean alpha and JArray
         aMean += a
         JMeanArray += JArray
         aStore[i] = format(a, '.4f')
         
-        if aMean/
+        if (abs(aMean/(i+1) - preAMean)) < error:      #converge
+            print ("End time ",aMean/(i+1), preAMean, error, time.time()-beginTime, i)   
+            break
+        preAMean = aMean/(i+1)
+       
+        
     aMean = aMean / iters
     JMeanArray = np.divide(JMeanArray, iters)
     
@@ -70,4 +85,10 @@ def MCMCATestConvergeTime(BArray, iters):
     return aMean, JMeanArray, aStore
 
 
+if __name__== "__main__":
 
+    BArray = np.array([1,1,0,1,1,0,0,0])
+    iters = 100000
+    aMean, JMeanArray, aStore = MCMCATestConvergeTime( BArray, iters)
+    print("QuestoinJ aMean: ", aMean)
+    print("QuestionJ JMeanArray: ", JMeanArray)

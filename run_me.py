@@ -172,7 +172,7 @@ def MCMCAJQuestionJ(BArray, iters):
         if np.random.rand() <= acceptRatio:        #accept new JArray
             a = aNew
             JArray = JArrayNew
-            
+                  
         #mean alpha and JArray
         aMean += a
         JMeanArray += JArray
