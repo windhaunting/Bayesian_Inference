@@ -260,7 +260,7 @@ if __name__== "__main__":
     ################################################
     print('1a through 1l computation goes here ...')
     
-    '''
+    
     print ("beginning Question 1a")
     JArray = np.array([0, 1, 1, 0, 1])
     a = 0.75
@@ -408,8 +408,6 @@ if __name__== "__main__":
     print("aMeanStore: ", aMean, aMeanStore)
     
     
-    '''
-    
     print ("beginning Question 1j")
              
     BArray = np.array([1,1,0,1,1,0,0,0])
@@ -422,7 +420,7 @@ if __name__== "__main__":
     #plotQuestionJHistPAlpha(aStore)
     plotQuestionJAlphaIteration(aStore)
     
-    '''
+    
     print ("beginning Question 1k")
     a = 0.6
     Jn = 1
@@ -471,5 +469,4 @@ if __name__== "__main__":
     file_name = '../Predictions/best.csv'
     predictNextBallBayesInference(file_name)
     
-    '''
 	

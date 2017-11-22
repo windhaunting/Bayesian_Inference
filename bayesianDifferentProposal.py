@@ -33,7 +33,7 @@ def normallFuctionAlpha(a):
     return newAlpha
 
 
-def normalFunctionGamma(a):
+def GammaFunctionAlpha(a):
     '''
     use gamma function for alpha
     '''
@@ -56,9 +56,9 @@ def MCMCATestConvergeTime(BArray, iters):
     preAMean = 0
     for i in range(0, iters):
         #propose new alpha and J
-        aNew = getNewAQuestionG(a)
+        #aNew = getNewAQuestionG(a)
         #aNew = normallFuctionAlpha(a)
-        #aNew = normalFunctionGamma(a)
+        aNew = GammaFunctionAlpha(a)
         JArrayNew = getNewJQuestionE(JArray)
         #acceptance ratio
         acceptRatio = getJointAJBQuestionD(JArrayNew, BArray, aNew) / getJointAJBQuestionD(JArray, BArray, a)
