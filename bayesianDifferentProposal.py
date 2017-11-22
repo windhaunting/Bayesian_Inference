@@ -7,8 +7,11 @@ Created on Fri Nov 17 18:01:12 2017
 """
 
 from run_me import getNewAJQuestionI
+from run_me import getNewJQuestionE
 from run_me import getJointAJBQuestionD
 import numpy as np
+
+import time
 
 #for extra credit
 
@@ -40,9 +43,12 @@ def MCMCATestConvergeTime(BArray, iters):
     aMean = a      #initialize JMean
     JMeanArray = JArray #np.array([0]*len(JArray))       ##initialize JMean
     aStore = np.array([0]*iters, dtype=float)
+    beginTime = time.time()
+    
     for i in range(0, iters):
         #propose new alpha and J
-        aNew, JArrayNew = getNewAJQuestionI(a, JArray)
+        aNew = normallFuctionAlpha(a)
+        JArrayNew = getNewJQuestionE()
         #acceptance ratio
         acceptRatio = getJointAJBQuestionD(JArrayNew, BArray, aNew) / getJointAJBQuestionD(JArray, BArray, a)
         
@@ -55,7 +61,8 @@ def MCMCATestConvergeTime(BArray, iters):
         aMean += a
         JMeanArray += JArray
         aStore[i] = format(a, '.4f')
-    
+        
+        if aMean/
     aMean = aMean / iters
     JMeanArray = np.divide(JMeanArray, iters)
     
