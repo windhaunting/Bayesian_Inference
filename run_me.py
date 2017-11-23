@@ -367,14 +367,12 @@ if __name__== "__main__":
     print (" JMeanArray: ", JMeanArray)
        
     
-    
     print ("beginning Question 1g")
     a = 0.5
     aNew = getNewAQuestionG(a)
     print ("proposed aNew: ", aNew)
     
-    
-    
+      
     print ("beginning Question 1h")
     JArray= np.array([0,1,0,1,0])
     BArray = np.array([1,0,1,0,1])
